@@ -41,6 +41,9 @@ runs:
             git fetch origin "$CURRENT_BRANCH"
             git reset --hard "origin/$CURRENT_BRANCH"
           [ -n '${{ inputs.deploy }}' ] && make deploy ${{ inputs.deploy }}
+          # don't use && since we don't need to escape quotes and eval string
           if [ -n '${{ inputs.script }}' ]; then
+            # make body not empty even if script is not provided (bash -c fails to parse empty if body)
+            true;
             ${{ inputs.script }}
           fi
