@@ -9,6 +9,8 @@ inputs:
     default: true
   deploy:
     description: 'name of the service that needs to be deployed'
+  script:
+    description: 'additional script if needed'
   # ssh
   host:
     description: 'host'
@@ -38,5 +40,7 @@ runs:
           [ ${{ inputs.pull }} = 'true' -a ${{ github.ref_name }} = "$CURRENT_BRANCH" ] && \
             git fetch origin "$CURRENT_BRANCH"
             git reset --hard "origin/$CURRENT_BRANCH"
-            [ -n '${{ inputs.deploy }}' ] && make deploy ${{ inputs.deploy }}
-
+          [ -n '${{ inputs.deploy }}' ] && make deploy ${{ inputs.deploy }}
+          if [ -n '${{ inputs.script }}' ]; then
+            ${{ inputs.script }}
+          fi
