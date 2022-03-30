@@ -1,10 +1,15 @@
 name: 'Test action'
 description: 'description'
+
 inputs:
+  # meta
   pull:
     description: 'whether to pull'
     required: true
     default: true
+  deploy:
+    description: 'name of the service that needs to be deployed'
+  # ssh
   host:
     description: 'host'
     required: true
@@ -16,6 +21,7 @@ inputs:
     description: 'username'
   password:
     description: 'password'
+
 runs:
   using: 'composite'
   steps:
@@ -29,6 +35,8 @@ runs:
           . $HOME/.profile
           cd "$DEPLOYMENT_DIR"
           CURRENT_BRANCH=$(git branch --show-current)
-          echo ${{ inputs.pull }}
-          [ ${{ github.ref_name }} = "$CURRENT_BRANCH" ] && git pull origin "$CURRENT_BRANCH"
+          [ ${{ inputs.pull }} = 'true' -a ${{ github.ref_name }} = "$CURRENT_BRANCH" ] && \
+            git fetch origin "$CURRENT_BRANCH"
+            git reset --hard "origin/$CURRENT_BRANCH"
+            [ -n '${{ inputs.deploy }}' ] && make deploy ${{ inputs.deploy }}
 
