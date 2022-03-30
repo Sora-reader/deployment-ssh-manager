@@ -5,15 +5,26 @@ inputs:
     description: 'whether to pull'
     required: true
     default: true
+  host:
+    description: 'host'
+    required: true
+  port:
+    description: 'port'
+    required: true
+    default: 22
+  username:
+    description: 'username'
+  password:
+    description: 'password'
 runs:
   using: 'composite'
   steps:
     - name: Deploy to ssh server
       uses: appleboy/ssh-action@v0.1.4
       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        password: ${{ secrets.SSH_PASSWORD }}
+        host: ${{ inputs.host }}
+        username: ${{ inputs.username }}
+        password: ${{ inputs.password }}
         script : |
           . $HOME/.profile
           cd "$DEPLOYMENT_DIR"
