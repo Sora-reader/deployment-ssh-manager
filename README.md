@@ -1,6 +1,6 @@
 # Sora depoyment action
 
-Wrapper for ssh-action with pull/deploy functionality for single-server deployment.
+Wrapper for [appleboy/ssh-action](https://github.com/appleboy/ssh-action) with pull/deploy functionality for single-server deployment.
 
 ## Inputs
 
