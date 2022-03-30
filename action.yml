@@ -1,0 +1,23 @@
+name: 'Test action'
+description: 'description'
+inputs:
+  pull:
+    description: 'whether to pull'
+    required: true
+    default: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Deploy to ssh server
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        script : |
+          . $HOME/.profile
+          cd "$DEPLOYMENT_DIR"
+          CURRENT_BRANCH=$(git branch --show-current)
+          echo ${{ inputs.pull }}
+          [ ${{ github.ref_name }} = "$CURRENT_BRANCH" ] && git pull origin "$CURRENT_BRANCH"
+
