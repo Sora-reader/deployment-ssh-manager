@@ -1,5 +1,5 @@
-name: 'Test action'
-description: 'description'
+name: 'Sora ssh action'
+description: "Server management action. A wrapper around appleboy's ssh-action. Allows to pull/deploy repo or just run some code."
 
 inputs:
   # meta
@@ -37,7 +37,7 @@ runs:
           . $HOME/.profile
           cd "$DEPLOYMENT_DIR"
           CURRENT_BRANCH=$(git branch --show-current)
-          [ ${{ inputs.pull }} = 'true' -a ${{ github.ref_name }} = "$CURRENT_BRANCH" ] && \
+          [ '${{ inputs.pull }}' = 'true' -a '${{ github.ref_name }}' = "$CURRENT_BRANCH" ] && \
             git fetch origin "$CURRENT_BRANCH"
             git reset --hard "origin/$CURRENT_BRANCH"
           [ -n '${{ inputs.deploy }}' ] && make deploy ${{ inputs.deploy }}
